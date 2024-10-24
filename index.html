@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Add User</h1>
+    <form action="/add_user" method="POST">
+        <input type="text" name="name" placeholder="Enter Name" required><br><br>
+        <input type="email" name="email" placeholder="Enter Email" required><br><br>
+        <button type="submit">Add User</button>
+    </form>
+
+    <h2>User List</h2>
+    <button onclick="fetchUsers()">Show Users</button>
+    <ul id="userList"></ul>
+
+    <script>
+        // Fetch users from the database and display them
+        function fetchUsers() {
+            fetch('/get_users')
+                .then(response => response.json())
+                .then(data => {
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = ''; // Clear previous list
+                    data.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = `ID: ${user[0]}, Name: ${user[1]}, Email: ${user[2]}`;
+                        userList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        }
+    </script>
+</body>
+</html>
